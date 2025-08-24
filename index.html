@@ -23,9 +23,10 @@
     body {
       margin: 0; background: radial-gradient(1200px 700px at 80% -10%, #1e293b 0%, var(--bg) 55%) fixed;
       color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans JP, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      display: flex; align-items: center; justify-content: center; padding: 24px;
+      padding: 24px;
     }
     .app {
+      margin: 0 auto; /* 横方向中央寄せ */
       width: min(100%, 1100px);
       display: grid;
       grid-template-columns: 340px 1fr;
@@ -398,17 +399,13 @@
     parent.postMessage({ type: "resize", height: height }, "*");
   }
 
-  // 盤面を作るたびに高さを送信
   const origBuildBoard = buildBoard;
   buildBoard = function() {
     origBuildBoard();
     sendHeight();
   };
 
-  // ウィンドウサイズが変わったときも再送
   window.addEventListener("resize", sendHeight);
-
-  // ページ読み込み直後にも送っておく
   window.addEventListener("load", sendHeight);
 </script>
   
