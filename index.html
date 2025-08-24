@@ -412,21 +412,21 @@
     newGame();
   </script>
 
-<script>
-  function sendHeight() {
-    const height = document.documentElement.scrollHeight;
-    parent.postMessage({ type: "resize", height: height }, "*");
-  }
+  <script>
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      parent.postMessage({ type: "resize", height: height }, "*");
+    }
 
-  const origBuildBoard = buildBoard;
-  buildBoard = function() {
-    origBuildBoard();
-    sendHeight();
-  };
+    const origBuildBoard = buildBoard;
+    buildBoard = function() {
+      origBuildBoard();
+      sendHeight();
+    };
 
-  window.addEventListener("resize", sendHeight);
-  window.addEventListener("load", sendHeight);
-</script>
+    window.addEventListener("resize", sendHeight);
+    window.addEventListener("load", sendHeight);
+  </script>
   
 </body>
 </html>
