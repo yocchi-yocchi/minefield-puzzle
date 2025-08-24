@@ -391,5 +391,23 @@
     setDifficulty('easy');
     newGame();
   </script>
+
+<script>
+  function sendHeight() {
+    const height = document.body.scrollHeight;
+    parent.postMessage({ type: "resize", height: height }, "*");
+  }
+
+  // 盤面を作るたびに高さを送信
+  const origBuildBoard = buildBoard;
+  buildBoard = function() {
+    origBuildBoard();
+    sendHeight();
+  };
+
+  // ウィンドウサイズが変わったときも再送
+  window.addEventListener("resize", sendHeight);
+</script>
+  
 </body>
 </html>
