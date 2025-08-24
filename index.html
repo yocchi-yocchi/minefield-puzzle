@@ -392,22 +392,28 @@
     newGame();
   </script>
 
-<script>
-  function sendHeight() {
-    const height = document.body.scrollHeight;
-    parent.postMessage({ type: "resize", height: height }, "*");
-  }
+  <script>
+    function sendHeight() {
+      const height = document.documentElement.scrollHeight;
+      parent.postMessage({ type: "resize", height: height }, "*");
+    }
 
-  // 盤面を作るたびに高さを送信
-  const origBuildBoard = buildBoard;
-  buildBoard = function() {
-    origBuildBoard();
-    sendHeight();
-  };
+　　 // 盤面を作るたびに高さを送信
+　　 const origBuildBoard = buildBoard;
+　 　buildBoard = function() {
+  　　 origBuildBoard();
+  　　 // すぐ送信
+  　　 sendHeight();
+  　　 // レイアウト確定後にもう一度送信（0.1秒遅らせる）
+  　　 setTimeout(sendHeight, 100);
+　　 };
 
-  // ウィンドウサイズが変わったときも再送
-  window.addEventListener("resize", sendHeight);
-</script>
+    // ウィンドウサイズが変わったときも再送
+    window.addEventListener("resize", sendHeight);
+
+    // 初期ロード時も一度送信
+    window.addEventListener("load", sendHeight);
+  </script> 
 
 </body>
 </html>
