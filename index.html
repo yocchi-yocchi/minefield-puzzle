@@ -69,8 +69,14 @@
       touch-action: manipulation; user-select: none;
     }
     .cell { 
-      width: 32px; height: 32px; display: grid; place-items: center; 
-      background: var(--tile); border: 1px solid var(--tile-border); border-radius: 8px; font-weight: 800; 
+      width: var(--cell-size);
+      height: var(--cell-size);
+      display: grid;
+      place-items: center; 
+      background: var(--tile); 
+      border: 1px solid var(--tile-border); 
+      border-radius: 8px; 
+      font-weight: 800; 
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans JP, Helvetica, Arial;
       transition: transform .05s ease;
     }
@@ -170,11 +176,17 @@
       if (preset === 'easy') { ROWS=9; COLS=9; MINES=10; }
       else if (preset === 'medium') { ROWS=16; COLS=16; MINES=40; }
       else if (preset === 'hard') { ROWS=16; COLS=30; MINES=99; }
+
+      // 盤面が大きい場合はセルを小さくする
+      let size = 32;
+      if (COLS > 20) size = 24;
+      if (COLS > 28) size = 20;
+      document.documentElement.style.setProperty('--cell-size', size + 'px');
+
       sizeLabelEl.textContent = `${COLS}×${ROWS}（地雷 ${MINES}）`;
-      document.documentElement.style.setProperty('--cell-size', '32px');
-      boardEl.style.gridTemplateColumns = `repeat(${COLS}, 32px)`;
-      boardEl.style.gridAutoRows = `32px`;
-    }
+      boardEl.style.gridTemplateColumns = `repeat(${COLS}, var(--cell-size))`;
+      boardEl.style.gridAutoRows = `var(--cell-size)`;
+    }  
 
     difficultyEl.addEventListener('change', (e) => {
       const v = e.target.value;
@@ -192,9 +204,16 @@
       const maxMines = Math.max(1, rows*cols - 1);
       const mines = clamp(parseInt(document.getElementById('mines').value||10),1,Math.min(300,maxMines));
       COLS=cols; ROWS=rows; MINES=mines;
+
+      // サイズを自動調整
+      let size = 32;
+      if (COLS > 20) size = 24;
+      if (COLS > 28) size = 20;
+      document.documentElement.style.setProperty('--cell-size', size + 'px');
+
       sizeLabelEl.textContent = `${COLS}×${ROWS}（地雷 ${MINES}）`;
-      boardEl.style.gridTemplateColumns = `repeat(${COLS}, 32px)`;
-      boardEl.style.gridAutoRows = `32px`;
+      boardEl.style.gridTemplateColumns = `repeat(${COLS}, var(--cell-size))`;
+      boardEl.style.gridAutoRows = `var(--cell-size)`;
       newGame();
     }
 
